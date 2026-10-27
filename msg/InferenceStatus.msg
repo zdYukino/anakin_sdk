@@ -30,3 +30,9 @@ string detail
 
 # Separate cumulative local SDK writer receipts, not physical-execution ACK.
 uint8 env_sdk_published_phase_mask
+
+# Versioned execution contract. Discovery messages carry no execution authorization.
+uint8 MECHANICAL_POSITION=0
+uint8 PD_REFERENCE=1
+string execution_profile
+uint8 command_semantics

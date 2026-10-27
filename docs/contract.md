@@ -1,4 +1,4 @@
-# Contract v2
+# Contract v3
 
 ## Ownership and standard payloads
 
@@ -35,3 +35,9 @@ The sender is a separate C++ monotonic 2 ms thread; it skips missed periods and 
 ## Explicit simulation gain profiles
 
 `g1_asap_sim_v1` preserves the original frozen full-ASAP 29-joint table for reproducibility. `g1_asap_merged_sim_v1` reproduces the unchanged Python environment merge: start with G1_29DoF and override only the actual producing policy's action_dof. Loco overrides twelve leg joints; CR7 overrides twenty-three joints and retains the base environment gains at its six missing wrists. Profile data is shared metadata in simulation_profile.hpp; env owns profile authorization, selection using the actual emitted model/phase, CRC and all SDK commands. The gain profile is identical in env state, request, status and target. These profiles have identical existing position bounds; neither introduces output clipping or a hardware backend.
+
+## Explicit reference semantics (v3)
+
+State, switch request/queued response, status and target carry an identical execution_profile and command_semantics. Unknown profile/type pairs are rejected, including reuse of a request UUID with different semantics. The default g1_position_strict_sim_v1 / MECHANICAL_POSITION retains the original bounded-position negative check. g1_pd_reference_project_sim_v1 and g1_pd_reference_equivalent_sim_v1 use PD_REFERENCE and require the merged gain profile. MC publishes the unchanged final startup/transition mux reference q_v; raw action/history are never replaced with projected or encoded values. Env alone owns mechanical projection, gains, compensation, budgets, CRC and SDK writes.
+
+A projects q_s into the mechanical range with zero feed-forward and explicitly changes PD effort. B1 uses q_s=clip(q_v,l,u), tau_ff=Kp*(q_v-q_s) with the same SDK Kp/Kd and dq_ref=0. The float32 encoder uses the representable SDK q_v and in-range q_s, then accounts for feed-forward rounding. This algebra is not a safety proof. No B2 software-PD mode exists. Both new profiles require complete, sourced velocity/near-limit/saturation budgets before native SDK initialization; an incomplete frozen budget must fail closed.

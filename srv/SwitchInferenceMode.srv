@@ -16,6 +16,12 @@ string gain_profile
 string transition_profile
 bool allow_source_continuation
 builtin_interfaces/Duration timeout
+
+# Versioned execution contract. Discovery messages carry no execution authorization.
+uint8 MECHANICAL_POSITION=0
+uint8 PD_REFERENCE=1
+string execution_profile
+uint8 command_semantics
 ---
 # accepted means queued for a future frame boundary, never ready/completed.
 bool accepted
@@ -23,3 +29,8 @@ uint8 reason
 string detail
 unique_identifier_msgs/UUID mc_instance_id
 uint64 epoch
+
+# The queued response echoes the exact negotiated execution contract.
+string execution_profile
+uint8 command_semantics
+string gain_profile

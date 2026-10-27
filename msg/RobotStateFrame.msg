@@ -1,5 +1,5 @@
 # Snapshot assembled by env. Each asynchronous nested Header preserves its sample time.
-uint32 SCHEMA_VERSION=2
+uint32 SCHEMA_VERSION=3
 uint32 VALID_JOINTS=1
 uint32 VALID_IMU=2
 uint32 VALID_COMMAND=4
@@ -47,3 +47,9 @@ uint64 sdk_published_epoch
 uint64 sdk_published_target_seq
 uint8 sdk_published_phase_mask
 uint64 sdk_publish_count
+
+# Versioned execution contract. Discovery messages carry no execution authorization.
+uint8 MECHANICAL_POSITION=0
+uint8 PD_REFERENCE=1
+string execution_profile
+uint8 command_semantics
