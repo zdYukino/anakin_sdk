@@ -27,3 +27,6 @@ uint64[3] phase_last_seq
 uint8 published_phase_mask
 uint8 env_seen_phase_mask
 string detail
+
+# Separate cumulative local SDK writer receipts, not physical-execution ACK.
+uint8 env_sdk_published_phase_mask

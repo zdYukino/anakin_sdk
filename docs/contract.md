@@ -1,4 +1,4 @@
-# Contract v1
+# Contract v2
 
 ## Ownership and standard payloads
 
@@ -23,3 +23,11 @@ Target/state latest data use keep-last depth 1, best effort and volatile durabil
 ## Initial scope
 
 G1 ASAP loco actor_obs[1,500] -> action[1,12], independent four-frame grouped history; ASAP CR7 actor_obs[1,380] -> action[1,23]. MC clips raw action at +/-100, scales once by 0.25, adds model defaults and maps once to canonical29. CR7's independently recorded Python failures remain failures until revalidated. Other ONNX policies, TorchScript, hands, FK and physical execution are outside the first implementation milestone.
+
+## Native simulation publication and authorization
+
+Version 2 appends an explicit execution-mode enum and SDK publication identities, epoch, target sequence, cumulative phase mask and count to RobotStateFrame. MC reports a distinct cumulative env_sdk_published_phase_mask. Reception/validation and SDK writer success are separate facts; neither proves actuator execution. All three repositories must rebuild against the same locked SDK commit.
+
+The only native backend is explicitly selected unitree_loopback_sim on an inspected active lo interface and a nonzero SDK domain. It has no hardware path. Construction starts disarmed. Fresh RC L1+R1+X first authorizes a two-second measured-pose alignment, then holds; a second fresh edge requests loco inference. A/B locally revokes targets, with at most 100 ms of damping and no wait for MC. R1+Up requests mimic, R1+Down requests loco, and L1+R1+Y requests a new epoch for the current model. Terminal faults require a process restart and explicit authorization.
+
+The sender is a separate C++ monotonic 2 ms thread; it skips missed periods and checks state age, RC age, transaction and source TTL before SDK writes. Duplicate SDK ticks cannot renew source age. Feedback is finite and CRC checked; absent remote/odometry has no validity bit. Physical remote-loss/watchdog semantics remain unverified.
