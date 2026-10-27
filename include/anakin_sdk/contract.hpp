@@ -10,6 +10,11 @@
 namespace anakin {
 inline constexpr uint32_t schema_version = 2;
 inline constexpr const char* schema_id = "anakin.g1.canonical29.v2";
+inline constexpr const char* legacy_gain_profile="g1_asap_sim_v1";
+inline constexpr const char* merged_gain_profile="g1_asap_merged_sim_v1";
+inline bool known_gain_profile(const std::string& profile) {
+ return profile==legacy_gain_profile || profile==merged_gain_profile;
+}
 using Uuid = unique_identifier_msgs::msg::UUID;
 inline bool zero(const Uuid& id) { return std::all_of(id.uuid.begin(),id.uuid.end(),[](auto c){ return c==0; }); }
 inline Uuid new_uuid() { Uuid id; std::random_device r; for(auto& c:id.uuid)c=static_cast<uint8_t>(r()); id.uuid[6]=(id.uuid[6]&15)|64; id.uuid[8]=(id.uuid[8]&63)|128; return id; }
