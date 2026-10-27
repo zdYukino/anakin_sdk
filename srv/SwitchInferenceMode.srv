@@ -1,0 +1,25 @@
+uint8 OK=0
+uint8 INVALID=1
+uint8 ID_CONFLICT=2
+uint8 STALE_EPOCH=3
+uint8 WRONG_INSTANCE=4
+uint8 BUSY=5
+uint8 UNSUPPORTED=6
+unique_identifier_msgs/UUID session_id
+unique_identifier_msgs/UUID expected_mc_instance_id
+unique_identifier_msgs/UUID request_id
+uint64 next_epoch
+uint64 source_state_seq
+string schema_id
+string target_model
+string gain_profile
+string transition_profile
+bool allow_source_continuation
+builtin_interfaces/Duration timeout
+---
+# accepted means queued for a future frame boundary, never ready/completed.
+bool accepted
+uint8 reason
+string detail
+unique_identifier_msgs/UUID mc_instance_id
+uint64 epoch
