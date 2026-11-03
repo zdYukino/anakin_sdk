@@ -58,7 +58,7 @@ SDK revision metadata records Git HEAD. An uncommitted SDK contract diff is not 
 
 ## 启动、安装与测试边界
 
-正常 Env 入口默认 real，`--sim` 显式选择仿真，`--real` 可显式选择实机；旧 `--loopback-sim` 已移除。入口只执行所选安装内的 native Env ELF，MC 和官方模拟器由用户分别启动。`sim.yaml`、`real.yaml`、`inputs.yaml` 从实际 Env ELF 的同一安装前缀加载，支持显式覆盖、启动后不热重载，无当前目录/源码/其他 overlay 回退。MC 的实际入口是 `anakin_mc/en_run.sh`。
+正常 Env 入口默认 real，`--sim` 显式选择仿真，`--real` 可显式选择实机；旧 `--loopback-sim` 已移除。入口只执行所选安装内的 native Env ELF，MC 和官方模拟器由用户分别启动。`sim.yaml`、`real.yaml`、`inputs.yaml` 从实际 Env ELF 的同一安装前缀加载，支持显式覆盖、启动后不热重载，无当前目录/源码/其他 overlay 回退。MC 的实际入口是 `anakin_mc/em_run.sh`。
 
 各包启动器优先各自独立安装，否则选择共享工作区；`ANAKIN_PREFIX` / `ANAKIN_SDK_PREFIX` 是显式选择。选定 ELF、本地 ament 标记、资源、消费者构建锁和安装 SDK revision 必须一致。SDK metadata 只记录 HEAD，无法单凭它识别未提交源代码；当前共同开发构建应记录这项限制，最终 SDK 提交后再更新双方锁并重建。
 
