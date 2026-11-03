@@ -19,21 +19,24 @@ inline constexpr uint8_t mechanical_position=0, pd_reference=1;
 inline constexpr const char* strict_execution_profile="g1_position_strict_sim_v1";
 inline constexpr const char* project_execution_profile="g1_pd_reference_project_sim_v1";
 inline constexpr const char* equivalent_execution_profile="g1_pd_reference_equivalent_sim_v1";
-enum class ExecutionEncoding { StrictPosition, ProjectReference, EquivalentReference };
+inline constexpr const char* sdk_pd_execution_profile="g1_sdk_pd_v1";
+enum class ExecutionEncoding { StrictPosition, ProjectReference, EquivalentReference, SdkPdReference };
 inline ExecutionEncoding execution_encoding(const std::string& profile,uint8_t semantics) {
  if(profile==strict_execution_profile && semantics==mechanical_position)return ExecutionEncoding::StrictPosition;
  if(profile==project_execution_profile && semantics==pd_reference)return ExecutionEncoding::ProjectReference;
  if(profile==equivalent_execution_profile && semantics==pd_reference)return ExecutionEncoding::EquivalentReference;
+ if(profile==sdk_pd_execution_profile && semantics==pd_reference)return ExecutionEncoding::SdkPdReference;
  throw std::invalid_argument("Unknown or mismatched execution profile/command semantics");
 }
 inline uint8_t profile_semantics(const std::string& profile) {
  if(profile==strict_execution_profile)return mechanical_position;
- if(profile==project_execution_profile || profile==equivalent_execution_profile)return pd_reference;
+ if(profile==project_execution_profile || profile==equivalent_execution_profile || profile==sdk_pd_execution_profile)return pd_reference;
  throw std::invalid_argument("Unknown execution profile");
 }
 inline bool known_execution_contract(const std::string& profile,uint8_t semantics,const std::string& gain) {
  try {return known_gain_profile(gain) &&
-  (execution_encoding(profile,semantics)==ExecutionEncoding::StrictPosition || gain==merged_gain_profile);}
+  (execution_encoding(profile,semantics)==ExecutionEncoding::StrictPosition ||
+   execution_encoding(profile,semantics)==ExecutionEncoding::SdkPdReference || gain==merged_gain_profile);}
  catch(const std::invalid_argument&) {return false;}
 }
 using Uuid = unique_identifier_msgs::msg::UUID;

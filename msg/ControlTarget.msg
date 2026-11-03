@@ -19,7 +19,8 @@ builtin_interfaces/Duration valid_for
 uint8 phase
 # Canonical29 absolute radian mux references, exactly one point; velocities/effort empty.
 # MECHANICAL_POSITION requires bounded positions. PD_REFERENCE is virtual PD q_v
-# after startup/transition mux; only the negotiated simulation profile may encode it.
+# after startup/transition mux. g1_sdk_pd_v1 writes the same true SDK PD reference
+# in both modes, without projection or compensation; gain provenance is unchanged.
 trajectory_msgs/JointTrajectory target
 
 # Versioned execution contract. Discovery messages carry no execution authorization.

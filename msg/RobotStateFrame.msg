@@ -15,6 +15,8 @@ uint64 state_seq
 uint32 sdk_tick
 uint32 validity
 string gain_profile
+# For g1_sdk_pd_v1, this permits MC inference in Preparing/Active, including warmup.
+# Motor writes separately require Env's current target, output and authority gates.
 bool execution_authorized
 sensor_msgs/JointState joints
 sensor_msgs/Imu imu
