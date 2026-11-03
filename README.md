@@ -1,10 +1,17 @@
 # anakin_sdk 0.1.0
 
-Public ament/rosidl contract shared by the independent `anakin_env` and `anakin_mc` repositories. Standard ROS messages stay in their official packages. This repository contains no vendor SDK, ONNX Runtime, actuator or inference implementation.
+ENV 与 MC 共用的 ROS 2 Humble 接口库，包含消息、服务和公共合同。SDK 没有常驻进程，不包含机器人或推理实现。
 
-Build on GTR with ROS 2 Humble: `source /opt/ros/humble/setup.bash; colcon build --base-paths .`.
-Consumers require exactly version 0.1.0 and compare the installed SDK Git revision with their `anakin_sdk.revision` lock.
-See [contract](docs/contract.md) for names, units, transaction rules and QoS.
+独立构建使用原生 CMake，无需 colcon workspace：
 
+```sh
+./build.sh --jobs 8
+```
 
-当前 C++ 运行合同、共同原始 SDK PD、持久等待和实机只读/异步权限见 [contract](docs/contract.md)。Env 默认 real、显式 `--sim`；MC、Env、官方模拟器分别由用户启动。操作说明见 [Env 独立运行说明](../anakin_env/docs/standalone-operation.md)。SDK metadata 记录 Git HEAD；未提交差异必须通过同一源树成套构建两个消费者，不能虚构锁版本。最终批准提交时先提交 SDK，再更新双方锁并重建。
+需要 Ubuntu 22.04 x86_64、ROS 2 Humble 开发依赖和 CMake 3.19+。可用 `ROS_PREFIX` 指定 ROS 安装，`ANAKIN_PYTHON` 指定带有 ROS 生成工具的 Python（默认 `/usr/bin/python3`）。`./build.sh --help` 列出参数。
+
+产物仅进入本仓的 `build/anakin_sdk/`、`install/anakin_sdk/`、`log/`。消费者通过 `ANAKIN_SDK_PREFIX=/path/to/anakin_sdk/install/anakin_sdk` 选用此安装；版本必须为 0.1.0，实际提交必须与消费者的 `anakin_sdk.revision` 一致。
+
+SDK 元数据在每次 CMake 配置时记录 Git HEAD。发布顺序是先完成并提交 SDK，再更新 ENV/MC 的锁并成套构建。不要将未提交的 SDK 差异视作新的可发布版本。
+
+[接口合同](docs/contract.md) 规定名称、单位、事务、QoS、推理许可和实机权限边界。统一初始化与构建由 [AnakinC](https://github.com/zdYukino/AnakinC) 编排，各子仓仍可独立使用。
